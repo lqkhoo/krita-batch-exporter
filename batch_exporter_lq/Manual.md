@@ -12,6 +12,7 @@ productively:
 Batch Exporter exports individual layers to image files based on metadata in
 the layer name. The supported options are:
 
+- `[f=2]` - LQ: frame. Trim this number of pixels off the defined sprite. Used for bbox positioning.
 - `[e=jpg,png]` - supported export image extensions
 - `[s=20,33.333,100,150]` - size in `%`.
 - `[p=path/to/custom/export/directory]` or `[p="path with spaces"]` - custom output path.
@@ -22,6 +23,7 @@ the layer name. The supported options are:
 - `[t=false]` or `[t=no]` - disable trimming the exported layer to the bounding box of
   the content.
 - `[i=false]` or `[i=no]` - disable parent metadata inheritance for a layer. More info [below](#layer-inheritance).
+
 
 A typical layer name with metadata looks like: `CharacterTorso e=png m=30 s=50,100`. This exports
 the layer as two images, with an added padding of 30 pixels on each side:

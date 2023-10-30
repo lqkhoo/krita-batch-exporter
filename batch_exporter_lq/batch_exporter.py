@@ -110,7 +110,7 @@ def renameLayers(cfg, statusBar, lineEdit):
 
 
 class GameArtTools(DockWidget):
-    title = "Batch Exporter"
+    title = "LQ Batch Exporter"
 
     def __init__(self):
         super().__init__()

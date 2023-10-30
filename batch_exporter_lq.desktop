@@ -1,10 +1,10 @@
 [Desktop Entry]
 Type=Service
 ServiceTypes=Krita/PythonPlugin
-X-KDE-Library=batch_exporter
+X-KDE-Library=batch_exporter_lq
 X-Krita-Manual=Manual.html
 X-Python-2-Compatible=false
-Name=Batch Exporter
+Name=Batch Exporter LQ
 Name[ca]=Exportador per lots
 Name[ca@valencia]=Exportador per lots
 Name[cs]=Exportér dávek

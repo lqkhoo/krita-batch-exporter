@@ -20,12 +20,22 @@ RE_QUOTED_PATH = re.compile(r'p="(.*?)"\s*')
 KI = Krita.instance()
 
 
-def nodeToImage(wnode):
+def nodeToImage(wnode, framesize):
     """
     Returns an QImage 8-bit sRGB
     """
+
+    # LQ: framesize is the number of pixels around the node
+    # that we do not want in the output. This is a border of
+    # fixed size in pixels around the output, so we can position
+    # the actual sprite within a rectangle of fixed size.
+    # This is so we can preserve the actual centerline, foot position
+    # etc., for automated pixel sprite animation rigging scripts.
+    f: int = framesize
+
     SRGB_PROFILE = "sRGB-elle-V2-srgbtrc.icc"
     [x, y, w, h] = wnode.bounds
+    [x, y, w, h] = [x+f, y+f, w-2*f, h-2*f] # LQ
 
     is_srgb = (
         wnode.node.colorModel() == "RGBA"
@@ -36,6 +46,8 @@ def nodeToImage(wnode):
     if is_srgb:
         pixel_data = wnode.node.projectionPixelData(x, y, w, h).data()
     else:
+        # LQ: This section borks out for clone layers when not in SRGB profile,
+        # so just make sure the sprites are in SRGB before export.
         temp_node = wnode.node.duplicate()
         temp_node.setColorSpace("RGBA", "U8", SRGB_PROFILE)
         pixel_data = temp_node.projectionPixelData(x, y, w, h).data()
@@ -270,13 +282,16 @@ class WNode:
         Transform Node to a QImage
         processes the image, names it based on metadata, and saves the image to the disk.
         """
-        img = nodeToImage(self)
+
         meta = self.cfg["meta"].copy()
 
         if self.inherit:
             meta.update(self.inheritedMetadata())
 
         meta.update(self.meta)
+
+        framesize = int(meta["f"][0])
+        img = nodeToImage(self, framesize)  # LQ
 
         margin, scale = meta["m"], meta["s"]
         extension, path = meta["e"], meta["p"][0]
