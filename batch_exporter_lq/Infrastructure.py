@@ -20,7 +20,7 @@ RE_QUOTED_PATH = re.compile(r'p="(.*?)"\s*')
 KI = Krita.instance()
 
 
-def nodeToImage(wnode, framesize):
+def nodeToImage(wnode):
     """
     Returns an QImage 8-bit sRGB
     """
@@ -31,7 +31,12 @@ def nodeToImage(wnode, framesize):
     # the actual sprite within a rectangle of fixed size.
     # This is so we can preserve the actual centerline, foot position
     # etc., for automated pixel sprite animation rigging scripts.
-    f: int = framesize
+    meta = wnode.cfg["meta"].copy()
+    if wnode.inherit:
+        meta.update(wnode.inheritedMetadata())
+    meta.update(wnode.meta)
+    framesize = int(meta["f"][0])
+    f = framesize
 
     SRGB_PROFILE = "sRGB-elle-V2-srgbtrc.icc"
     [x, y, w, h] = wnode.bounds
@@ -290,9 +295,7 @@ class WNode:
 
         meta.update(self.meta)
 
-        framesize = int(meta["f"][0])
-
-        img = nodeToImage(self, framesize)  # LQ
+        img = nodeToImage(self)
 
         margin, scale = meta["m"], meta["s"]
         extension, path = meta["e"], meta["p"][0]
