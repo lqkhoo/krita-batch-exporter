@@ -35,7 +35,7 @@ def nodeToImage(wnode, framesize):
 
     SRGB_PROFILE = "sRGB-elle-V2-srgbtrc.icc"
     [x, y, w, h] = wnode.bounds
-    [x, y, w, h] = [x+f, y+f, w-2*f, h-2*f] # LQ
+    x, y, w, h = x+f, y+f, w-2*f, h-2*f  # LQ
 
     is_srgb = (
         wnode.node.colorModel() == "RGBA"
