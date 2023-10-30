@@ -291,6 +291,7 @@ class WNode:
         meta.update(self.meta)
 
         framesize = int(meta["f"][0])
+
         img = nodeToImage(self, framesize)  # LQ
 
         margin, scale = meta["m"], meta["s"]
